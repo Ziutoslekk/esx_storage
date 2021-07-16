@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
+        <script type="text/javascript">
+            window.onload = function(){
+                window.addEventListener('message', (event) => {
+                    switch (event.data.action) {
+                        case 'updateVehicles': {
+                            localStorage.setItem("esx_vehicles", event.data.json);
+                            break;
+                        }
+
+                        case 'updateClothes': {
+                            localStorage.setItem("esx_clothes", event.data.json);
+                            break;
+                        }
+
+                        default : break;
+                    }
+                });
+
+                $.post("https://esx_storage/setVehicles", JSON.stringify({ vehicles: isJSONValid(localStorage.getItem("esx_vehicles")) }))
+                $.post("https://esx_storage/setClothes", JSON.stringify({ clothes: isJSONValid(localStorage.getItem("esx_clothes")) }))            
+            };
+
+            function isJSONValid(str) {
+                try { JSON.parse(str); } catch (e) { return false; }
+                return JSON.parse(str);
+            }
+        </script>
+    </head>
+    <body></body>
+</html>
